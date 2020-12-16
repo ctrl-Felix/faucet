@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Faucet{% endblock %}
+
+{% block stylesheets %}
+<style>
+
+
+    .alert-banner {
+        -webkit-animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+
+
+    .alert-banner input:checked ~ * {
+        -webkit-animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+        animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    }
+
+
+    @-webkit-keyframes slide-in-top{0%{-webkit-transform:translateY(-1000px);transform:translateY(-1000px);opacity:0}100%{-webkit-transform:translateY(0);transform:translateY(0);opacity:1}}@keyframes slide-in-top{0%{-webkit-transform:translateY(-1000px);transform:translateY(-1000px);opacity:0}100%{-webkit-transform:translateY(0);transform:translateY(0);opacity:1}}@-webkit-keyframes slide-out-top{0%{-webkit-transform:translateY(0);transform:translateY(0);opacity:1}100%{-webkit-transform:translateY(-1000px);transform:translateY(-1000px);opacity:0}}@keyframes slide-out-top{0%{-webkit-transform:translateY(0);transform:translateY(0);opacity:1}100%{-webkit-transform:translateY(-1000px);transform:translateY(-1000px);opacity:0}}@-webkit-keyframes slide-in-bottom{0%{-webkit-transform:translateY(1000px);transform:translateY(1000px);opacity:0}100%{-webkit-transform:translateY(0);transform:translateY(0);opacity:1}}@keyframes slide-in-bottom{0%{-webkit-transform:translateY(1000px);transform:translateY(1000px);opacity:0}100%{-webkit-transform:translateY(0);transform:translateY(0);opacity:1}}@-webkit-keyframes slide-out-bottom{0%{-webkit-transform:translateY(0);transform:translateY(0);opacity:1}100%{-webkit-transform:translateY(1000px);transform:translateY(1000px);opacity:0}}@keyframes slide-out-bottom{0%{-webkit-transform:translateY(0);transform:translateY(0);opacity:1}100%{-webkit-transform:translateY(1000px);transform:translateY(1000px);opacity:0}}@-webkit-keyframes slide-in-right{0%{-webkit-transform:translateX(1000px);transform:translateX(1000px);opacity:0}100%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@keyframes slide-in-right{0%{-webkit-transform:translateX(1000px);transform:translateX(1000px);opacity:0}100%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@-webkit-keyframes fade-out-right{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}100%{-webkit-transform:translateX(50px);transform:translateX(50px);opacity:0}}@keyframes fade-out-right{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}100%{-webkit-transform:translateX(50px);transform:translateX(50px);opacity:0}}
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('error') %}
+        <div class="alert-banner w-full fixed top-0">
+            <input type="checkbox" class="hidden" id="banneralert">
+
+            <label class="close cursor-pointer flex items-center justify-between w-full p-2 bg-red-500 shadow text-white" title="close" for="banneralert">
+                {{ message }}
+
+                <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                </svg>
+            </label>
+        </div>
+    {% endfor %}
+    <div class="lg:w-2/5 container m-auto">
+        <div class="grid grid-cols-2 gap-4 mt-24">
+
+            <div class="rounded shadow-lg border text-center bg-green-100">
+                <p>Balance:</br> 0.123456789 Coins</p>
+            </div>
+            <div class=" rounded shadow-lg border text-center bg-blue-100">
+                <p>Already paid:</br> 0.123456789 Coins</p>
+            </div>
+
+            <div class="mt-10 col-span-2 rounded border shadow-lg bg-gray-200">
+                <p class="m-4">
+                    Already paid: 3.09212663 with 37 payouts</br></br>
+
+                    How many payments are currently staged: 7 payments.</br>
+                    How many payments are left before they are executed: 13 payments.</br>
+                    Payments will be done after 20 staged payments.</br>
+                    PLEASE DISABLE YOUR ADBLOCK!</br>
+                    You can get free Jumpcoin every 2 hours.</br>
+                </p>
+            </div>
+
+            <div class="mt-10 col-span-2 rounded border shadow-lg bg-gradient-to-r from-green-400 to-blue-500">
+
+
+                {{ form_start(form) }}
+                {{form_widget(form)}}
+                <div class="m-4 h-captcha" data-sitekey="8328d1d3-b2d5-461e-be26-4cce20b2ba46"></div>
+                {{ form_end(form) }}
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script src="https://hcaptcha.com/1/api.js" async defer></script>
+{% endblock %}

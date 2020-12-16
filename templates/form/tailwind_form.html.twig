@@ -1,0 +1,72 @@
+{% use "form_div_layout.html.twig" %}
+
+{% block text_widget %}
+    {%- set type = type|default('text') -%}
+    {{ block('form_widget_simple') }}
+{% endblock %}
+
+{% block button_widget -%}
+    <div class="mx-3 md:flex mb-6">
+        <div class="inline-block px-6 py-2 text-xs font-medium leading-6 text-center text-white uppercase transition bg-blue-700 rounded shadow ripple hover:shadow-lg hover:bg-blue-800 focus:outline-none">
+            {%- set attr = attr|merge({class: (attr.class|default('bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'))|trim}) -%}
+            {{- parent() -}}
+        </div>
+    </div>
+
+
+{%- endblock button_widget %}
+
+{% block form_label -%}
+    {%- if label is same as(false) -%}
+        <div class="{{ block('form_label_class') }} "></div>
+    {%- else -%}
+        {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ block('form_label_class'))|trim}) -%}
+        <div class="float-left py-3 px-4">
+            {{- parent() -}}
+        </div>
+    {%- endif -%}
+{%- endblock form_label %}
+
+
+
+{% block form_row -%}
+    {%- set widget_attr = {} -%}
+    <div class="-mx-3 md:flex mb-6">
+        <div class="md:w-full px-3">
+            {{- form_label(form) -}}
+            <div class="{{ block('form_group_class') }} md:justify-center">
+                {{- form_widget(form, widget_attr) -}}
+                {{- form_help(form) -}}
+            </div>
+        </div>
+        {{ form_errors(form)  }}
+    </div>
+{%- endblock form_row %}
+
+{%- block form_widget_simple -%}
+    <input type="{{ type }}"
+           id="{{ id}}"
+           name="{{ full_name }}"
+           class="{{ block('input_class') }} appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
+           {% if value is not empty %}value="{{ value }}" {% endif %}
+            {% if required is defined %}required {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+
+
+{% block form_label_class -%}
+    block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4
+{% endblock form_label_class -%}
+
+{% block input_class -%}
+    {% if form.vars.errors|length %}border-red border-1{% endif %} appearance-none bg-grey-lighter border-2 border-grey-lighter rounded w-full py-2 px-4 text-grey-darker leading-tight focus:outline-none focus:bg-white focus:border-blue-light
+{% endblock input_class -%}
+
+{% block form_group_class -%}
+    form-control appearance-none rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline
+{% endblock form_group_class -%}
+
+{% block custom_button_class -%}
+    bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
+
+{% endblock custom_button_class -%}
