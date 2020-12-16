@@ -32,6 +32,16 @@ class Payouts
      */
     private $Time;
 
+    /**
+     * @ORM\Column(type="string", length=39)
+     */
+    private $ip;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $amount;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +79,30 @@ class Payouts
     public function setTime(\DateTimeInterface $Time): self
     {
         $this->Time = $Time;
+
+        return $this;
+    }
+
+    public function getIp(): ?string
+    {
+        return $this->ip;
+    }
+
+    public function setIp(string $ip): self
+    {
+        $this->ip = $ip;
+
+        return $this;
+    }
+
+    public function getAmount(): ?float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(float $amount): self
+    {
+        $this->amount = $amount;
 
         return $this;
     }

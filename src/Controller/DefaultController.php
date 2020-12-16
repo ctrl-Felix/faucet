@@ -46,17 +46,33 @@ class DefaultController extends AbstractController
                     'error',
                     'Please submit a valid captcha.'
                 );
-                return $this->render('default/faucet.html.twig', [
-                    'form' => $form->createView(),
-                ]);
+                return $this->redirectToRoute('app_default_faucet');
             }
 
-            //Check if address already claimed in the last x seconds (as set in .env)
-            $preclaim = $this->getDoctrine()
-                ->getRepository(Payouts::class)
-                ->findeOneBy(array('address'=>$payout->setAddress));
+            //Check if Ip has already claimed. If ip can't be resolved create an error
+            $ip = $request->getClientIp();
+            if($ip == 'unknown'){
+                $allowclaim = true;
+            } else {
+                $allowclaim = $this->getDoctrine()
+                    ->getRepository(Payouts::class)
+                    ->checkAddressAndIp($payout->getAddress(), $ip);
+            }
+
+            if($allowclaim){
+                $this->addFlash(
+                    'error',
+                    'You already claimed. Please wait a bit.'
+                );
+                return $this->redirectToRoute('app_default_faucet');
+            }
 
             $payout->setTime(new \DateTime());
+            $payout->setIp($ip);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($payout);
+            $em->flush();
+
 
 
         }
