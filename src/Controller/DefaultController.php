@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Payouts;
 use App\Form\ClaimType;
+use App\Service\Captcha;
+use App\Service\hCaptcha;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +17,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="app_default_faucet")
      */
-    public function index(Request $request, HttpClientInterface $client): Response
+    public function index(Request $request, Captcha $captcha): Response
     {
         $payout = new Payouts();
         $form = $this->createForm(ClaimType::class, $payout);
@@ -24,23 +26,7 @@ class DefaultController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
             //Check if captcha is valid
-            if($request->request->get('h-captcha-response') == null){
-                //no captcha filled
-                $this->addFlash(
-                    'error',
-                    'Please submit a valid captcha.'
-                );
-                return $this->redirectToRoute('app_default_faucet');
-            }
-            $captchaCode = $request->request->get('h-captcha-response');
-            $response = $client->request('POST', 'https://hcaptcha.com/siteverify', [
-                'body' => [
-                    'secret' => $_ENV['CAPTCHA_SECRET'],
-                    'response' => $captchaCode
-                ],
-            ]);
-            $response = $response->toArray();
-            if(!$response['success']){
+            if(!$captcha->validateCaptcha($request->request->get('h-captcha-response'))){
                 //Captcha not valid
                 $this->addFlash(
                     'error',
@@ -48,6 +34,7 @@ class DefaultController extends AbstractController
                 );
                 return $this->redirectToRoute('app_default_faucet');
             }
+
 
             //Check if Ip has already claimed. If ip can't be resolved create an error
             $ip = $request->getClientIp();
@@ -67,11 +54,24 @@ class DefaultController extends AbstractController
                 return $this->redirectToRoute('app_default_faucet');
             }
 
+            //Generate Payout Amount
+            $amount = round($this->random_float($_ENV['CLAIM_MIN'],$_ENV['CLAIM_MAX']), 8);
+            $payout->setAmount($amount);
+
+
             $payout->setTime(new \DateTime());
             $payout->setIp($ip);
             $em = $this->getDoctrine()->getManager();
             $em->persist($payout);
             $em->flush();
+
+            $this->addFlash(
+                'success',
+                'You claimed '.$amount
+            );
+            return $this->redirectToRoute('app_default_faucet');
+
+
 
 
 
@@ -83,5 +83,10 @@ class DefaultController extends AbstractController
         return $this->render('default/faucet.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+
+    function random_float ($min,$max) {
+        return ($min+lcg_value()*(abs($max-$min)));
     }
 }

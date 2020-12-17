@@ -39,9 +39,8 @@ class PayoutsRepository extends ServiceEntityRepository
     public function checkAddressAndIp($address, $ip)
     {
         return $this->createQueryBuilder('p')
-            ->Where('p.Time < :claimTime')
-            ->andWhere('p.address = :address')
-            ->orWhere('p.ip = :ip')
+            ->Where('p.Time > :claimTime')
+            ->andWhere('p.address = :address OR p.ip = :ip')
             ->setParameter('claimTime', date('Y-m-d H:i:s', time () - $_ENV['CLAIM_DIFFERENCE']))
             ->setParameter('address', $address)
             ->setParameter('ip', $ip)

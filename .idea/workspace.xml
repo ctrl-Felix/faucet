@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a5452fc-2205-403c-ba00-0c4048da8a31" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/migrations/Version20201216194834.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20201216195500.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Service/Captcha.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Twig/FaucetValuesExtension.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/DefaultController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DefaultController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Payouts.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Payouts.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/PayoutsRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/PayoutsRepository.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -155,7 +154,8 @@
       <updated>1608031446255</updated>
       <workItem from="1608031447398" duration="653000" />
       <workItem from="1608136072032" duration="6860000" />
-      <workItem from="1608147031699" duration="1544000" />
+      <workItem from="1608147031699" duration="2288000" />
+      <workItem from="1608209348136" duration="1797000" />
     </task>
     <servers />
   </component>
