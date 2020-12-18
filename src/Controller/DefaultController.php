@@ -5,11 +5,12 @@ namespace App\Controller;
 use App\Entity\Payouts;
 use App\Form\ClaimType;
 use App\Service\Captcha;
-use App\Service\hCaptcha;
+use JsonRPC\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Twig\FaucetValuesExtension;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DefaultController extends AbstractController
@@ -54,6 +55,14 @@ class DefaultController extends AbstractController
                 return $this->redirectToRoute('app_default_faucet');
             }
 
+            if (!$this->validateAddress($payout->getAddress())){
+                $this->addFlash(
+                    'error',
+                    'Invalid address.'
+                );
+                return $this->redirectToRoute('app_default_faucet');
+            }
+
             //Generate Payout Amount
             $amount = round($this->random_float($_ENV['CLAIM_MIN'],$_ENV['CLAIM_MAX']), 8);
             $payout->setAmount($amount);
@@ -86,7 +95,26 @@ class DefaultController extends AbstractController
     }
 
 
-    function random_float ($min,$max) {
+    private function random_float ($min,$max) {
         return ($min+lcg_value()*(abs($max-$min)));
     }
+
+    private function validateAddress($address){
+        $url = "http://".$_ENV['RPCUSER'].":".$_ENV['RPCPASSWORD']."@".$_ENV['RPCHOST'].":".$_ENV['RPCPORT'];
+
+
+        try{
+            $client = new Client($url);
+            $verify = $client->execute('validateaddress', array($address));
+            if($verify['isvalid']){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+
 }

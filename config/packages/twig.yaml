@@ -3,3 +3,9 @@ twig:
     form_themes: ['form/tailwind_form.html.twig']
     globals:
         recaptcha_site_key: '%env(RECAPTCHA_SITE_KEY)%'
+        ticker: '%env(TICKER)%'
+        coinname: '%env(COINNAME)%'
+        mode: '%env(PAYOUT_MODE)%'
+        staged_payouts: '%env(STAGED_PAYOUTS)%'
+        payout_time: '%env(PAYOUT_TIME)%'
+        claim_difference: '%env(CLAIM_DIFFERENCE)%'

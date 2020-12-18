@@ -57,18 +57,23 @@
                 <p>Balance:</br> 0.123456789 Coins</p>
             </div>
             <div class=" rounded shadow-lg border text-center bg-blue-100">
-                <p>Already paid:</br> 0.123456789 Coins</p>
+                <p>Already paid:</br> {{ sum() }} {{ ticker }}</p>
             </div>
 
             <div class="mt-10 col-span-2 rounded border shadow-lg bg-gray-200">
                 <p class="m-4">
-                    Already paid: 3.09212663 with 37 payouts</br></br>
+                    Already paid: {{ sum() }} with {{ count() }} payouts</br></br>
 
-                    How many payments are currently staged: 7 payments.</br>
-                    How many payments are left before they are executed: 13 payments.</br>
-                    Payments will be done after 20 staged payments.</br>
-                    PLEASE DISABLE YOUR ADBLOCK!</br>
-                    You can get free Jumpcoin every 2 hours.</br>
+                    Payments in queue: {{ stagedPayouts() }} </br>
+                    {% if mode == "staged" %}
+                    {{ staged_payouts - stagedPayouts() }} Payment(s) left until the next payout.</br>
+                    Payments will be done after {{ staged_payouts }} staged payments.</br>
+                    {% else %}
+                    Payments are made every {{ payout_time * (1/60) * (1/60) }} hours </br>
+
+                    {% endif %}
+
+                    You can get free {{ coinname }} every {{ claim_difference * (1/60) * (1/60) }} hours.</br>
                 </p>
             </div>
 

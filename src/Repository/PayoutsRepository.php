@@ -49,6 +49,35 @@ class PayoutsRepository extends ServiceEntityRepository
             ;
     }
 
+    public function countPayouts(){
+        return $this->createQueryBuilder('p')
+            ->select('Count(p.id)')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function sumPayouts(){
+        return $this->createQueryBuilder('p')
+            ->select('SUM(p.amount)')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function stagedPayouts(){
+        return $this->createQueryBuilder('p')
+            ->select('Count(p.id)')
+            ->andWhere('p.tx is NULL')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function getOpenPayouts(){
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.tx is NULL')
+            ->getQuery()
+            ->getResult();
+    }
+
     /*
     public function findOneBySomeField($value): ?Payouts
     {

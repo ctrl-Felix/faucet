@@ -2,31 +2,55 @@
 
 namespace App\Twig;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use App\Entity\Payouts;
 
 class FaucetValuesExtension extends AbstractExtension
 {
+
+    public function __construct(ManagerRegistry $doctrine){
+        $this->doctrine =  $doctrine;
+    }
+
     public function getFilters(): array
     {
         return [
-            // If your filter generates SAFE HTML, you should add a third
-            // parameter: ['is_safe' => ['html']]
-            // Reference: https://twig.symfony.com/doc/2.x/advanced.html#automatic-escaping
-            new TwigFilter('filter_name', [$this, 'doSomething']),
         ];
     }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('function_name', [$this, 'doSomething']),
+            new TwigFunction('count', [$this, 'count']),
+            new TwigFunction('sum', [$this, 'sum']),
+            new TwigFunction('stagedPayouts', [$this, 'stagedPayouts'])
         ];
     }
 
-    public function doSomething($value)
+    public function count()
     {
-        // ...
+
+        $doctrine = $this->doctrine;
+        return $doctrine->getRepository(Payouts::class)
+            ->countPayouts()[1];
+    }
+
+    public function sum()
+    {
+
+        $doctrine = $this->doctrine;
+        return $doctrine->getRepository(Payouts::class)
+            ->sumPayouts()[1];
+    }
+
+    public function stagedPayouts()
+    {
+
+        $doctrine = $this->doctrine;
+        return $doctrine->getRepository(Payouts::class)
+            ->stagedPayouts()[1];
     }
 }
