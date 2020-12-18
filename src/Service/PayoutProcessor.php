@@ -43,6 +43,7 @@ class PayoutProcessor
             $client = new Client($url);
             $balance = $client->execute('getbalance');
         } catch (Exception $e) {
+            echo "rpc error";
             return false;
         }
         $payouts = $doctrine->getRepository(Payouts::class)
@@ -62,7 +63,7 @@ class PayoutProcessor
 
         if($payoutamount >= $balance){
             //Not enough balance
-
+            echo "Not enough balance";
             return false;
         }
 
