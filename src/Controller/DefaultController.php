@@ -41,11 +41,13 @@ class DefaultController extends AbstractController
             $ip = $request->getClientIp();
             if($ip == 'unknown'){
                 $allowclaim = true;
-            } else {
-                $allowclaim = $this->getDoctrine()
-                    ->getRepository(Payouts::class)
-                    ->checkAddressAndIp($payout->getAddress(), $ip);
             }
+
+
+            $allowclaim = $this->getDoctrine()
+                ->getRepository(Payouts::class)
+                ->checkAddressAndIp($payout->getAddress(), $ip);
+
 
             if($allowclaim){
                 $this->addFlash(

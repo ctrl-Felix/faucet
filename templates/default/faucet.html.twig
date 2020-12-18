@@ -52,10 +52,10 @@
         <div class="grid grid-cols-2 gap-4 mt-24">
 
             <div class="rounded shadow-lg border text-center bg-green-100">
-                <p>Balance:</br>{{balance() }} {{ ticker }}</p>
+                <p>Balance:</br>{{balance()|round(8, 'common') }} {{ ticker }}</p>
             </div>
             <div class=" rounded shadow-lg border text-center bg-blue-100">
-                <p>Already paid:</br> {{ sum() }} {{ ticker }}</p>
+                <p>Already paid:</br> {{ sum()|round(8, 'common')|round(8, 'common') }} {{ ticker }}</p>
             </div>
 
             <div class="mt-10 col-span-2 rounded border shadow-lg bg-gray-200">

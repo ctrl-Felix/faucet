@@ -17,10 +17,8 @@ class AppPayoutCommand extends Command
 {
     protected static $defaultName = 'app:payout';
 
-    public function __construct(ManagerRegistry $doctrine, EntityManagerInterface $em, PayoutProcessor $payoutProcessor)
+    public function __construct(PayoutProcessor $payoutProcessor)
     {
-        $this->doctrine = $doctrine;
-        $this->em = $em;
         $this->PayoutProcessor = $payoutProcessor;
 
         parent::__construct();
@@ -39,9 +37,6 @@ class AppPayoutCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $doctrine = $this->doctrine;
-        $em = $this->em;
-
         if($_ENV['PAYOUT_MODE'] != 'timed'){
             $io->error('Stages Mode is activated. No payouts by using this cron. (To force payouts use --force');
 
@@ -50,15 +45,16 @@ class AppPayoutCommand extends Command
         }
 
 
-        if($this->PayoutProcessor->processPayouts()){
+        if($this->PayoutProcessor->processPayouts()) {
             $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
             return Command::SUCCESS;
-        } else {
-            $io->error('Error! Please check your balance.');
-
-            return Command::FAILURE;
         }
+
+        $io->error('Error! Please check your balance.');
+
+        return Command::FAILURE;
+
 
 
 
