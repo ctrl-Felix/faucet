@@ -74,6 +74,7 @@ class PayoutProcessor
                 $payout->setTx($tx);
                 $em->persist($payout);
             }
+            print_r($tx);
             $em->flush();
 
 
@@ -96,6 +97,7 @@ class PayoutProcessor
                 $payout->setTx($tx);
                 $em->persist($payout);
             }
+            print_r($tx);
             $em->flush();
 
 
