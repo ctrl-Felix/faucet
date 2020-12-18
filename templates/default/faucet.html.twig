@@ -67,11 +67,12 @@
                     {{ staged_payouts - stagedPayouts() }} Payment(s) left until the next payout.</br>
                     Payments will be done after {{ staged_payouts }} staged payments.</br>
                     {% else %}
-                    Payments are made every {{ payout_time * (1/60) * (1/60) }} hours </br>
+                        Payments are made every {{ payout_time * (1/60) * (1/60) }} hours </br>
+                        You can get free {{ coinname }} every {{ claim_difference * (1/60) * (1/60) }} hours.</br>
+
 
                     {% endif %}
 
-                    You can get free {{ coinname }} every {{ claim_difference * (1/60) * (1/60) }} hours.</br>
                 </p>
             </div>
 
