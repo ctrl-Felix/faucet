@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Faucet{% endblock %}
-
 {% block stylesheets %}
 <style>
 
@@ -54,7 +52,7 @@
         <div class="grid grid-cols-2 gap-4 mt-24">
 
             <div class="rounded shadow-lg border text-center bg-green-100">
-                <p>Balance:</br> 0.123456789 Coins</p>
+                <p>Balance:</br>{{balance() }} {{ ticker }}</p>
             </div>
             <div class=" rounded shadow-lg border text-center bg-blue-100">
                 <p>Already paid:</br> {{ sum() }} {{ ticker }}</p>

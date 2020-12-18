@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use Doctrine\Persistence\ManagerRegistry;
+use JsonRPC\Client;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -26,7 +27,8 @@ class FaucetValuesExtension extends AbstractExtension
         return [
             new TwigFunction('count', [$this, 'count']),
             new TwigFunction('sum', [$this, 'sum']),
-            new TwigFunction('stagedPayouts', [$this, 'stagedPayouts'])
+            new TwigFunction('stagedPayouts', [$this, 'stagedPayouts']),
+            new TwigFunction('balance', [$this, 'balance'])
         ];
     }
 
@@ -52,5 +54,19 @@ class FaucetValuesExtension extends AbstractExtension
         $doctrine = $this->doctrine;
         return $doctrine->getRepository(Payouts::class)
             ->stagedPayouts()[1];
+    }
+
+    public function balance()
+    {
+        $url = "http://".$_ENV['RPCUSER'].":".$_ENV['RPCPASSWORD']."@".$_ENV['RPCHOST'].":".$_ENV['RPCPORT'];
+        try{
+            $client = new Client($url);
+            $balance = $client->execute('getbalance');
+            return $balance;
+        } catch (Exception $e) {
+            return "Wallet Error";
+        }
+
+
     }
 }
