@@ -13,3 +13,4 @@ twig:
         ad_center: '%ad_center%'
         ad_left: '%ad_left%'
         ad_right: '%ad_right%'
+        adblock_blocker: '%adblock_blocker%'
