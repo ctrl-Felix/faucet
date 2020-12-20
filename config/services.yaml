@@ -5,6 +5,9 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
 
+imports:
+    - { resource: 'faucet.yaml' }
+
 services:
     # default configuration for services in *this* file
     _defaults:

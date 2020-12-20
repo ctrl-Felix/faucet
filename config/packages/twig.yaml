@@ -9,3 +9,7 @@ twig:
         staged_payouts: '%env(STAGED_PAYOUTS)%'
         payout_time: '%env(PAYOUT_TIME)%'
         claim_difference: '%env(CLAIM_DIFFERENCE)%'
+        ad_top: '%ad_top%'
+        ad_center: '%ad_center%'
+        ad_left: '%ad_left%'
+        ad_right: '%ad_right%'

@@ -50,6 +50,13 @@
     {% endfor %}
     <div class="lg:w-2/5 container m-auto">
         <div class="grid grid-cols-2 gap-4 mt-24">
+            {% if ad_top %}
+                <div class="pt-2 pb-2 w-full bg-white rounded col-span-2 shadow-lg flex">
+                    <div class="m-auto">
+                        {% include 'ads/ad_top.html.twig' %}
+                    </div>
+                </div>
+            {% endif %}
 
             <div class="rounded shadow-lg border text-center bg-green-100">
                 <p>Balance:</br>{{balance()|round(8, 'common') }} {{ ticker }}</p>
@@ -75,6 +82,14 @@
 
                 </p>
             </div>
+
+            {% if ad_center %}
+                <div class="mt-10 pt-2 pb-2 w-full bg-white rounded col-span-2 shadow-lg flex">
+                    <div class="m-auto">
+                        {% include 'ads/ad_center.html.twig' %}
+                    </div>
+                </div>
+            {% endif %}
 
             <div class="mt-10 col-span-2 rounded border shadow-lg bg-gradient-to-r from-green-400 to-blue-500">
 
