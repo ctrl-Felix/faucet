@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Payouts;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @method Payouts|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,8 +15,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PayoutsRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, ContainerInterface $container)
     {
+        $this->container = $container;
         parent::__construct($registry, Payouts::class);
     }
 
@@ -41,7 +43,7 @@ class PayoutsRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->Where('p.Time > :claimTime')
             ->andWhere('p.address = :address OR p.ip = :ip')
-            ->setParameter('claimTime', date('Y-m-d H:i:s', time () - $_ENV['CLAIM_DIFFERENCE']))
+            ->setParameter('claimTime', date('Y-m-d H:i:s', time () - $this->container->getParameter('claim_difference')))
             ->setParameter('address', $address)
             ->setParameter('ip', $ip)
             ->getQuery()
