@@ -8,14 +8,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use JsonRPC\Client;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PayoutProcessor
 {
-    public function __construct(ManagerRegistry $doctrine, EntityManagerInterface $em)
+    public function __construct(ManagerRegistry $doctrine, EntityManagerInterface $em, ContainerInterface $container)
     {
         $this->doctrine = $doctrine;
         $this->em = $em;
+        $this->container = $container;
+
 
 
     }
@@ -26,16 +29,16 @@ class PayoutProcessor
         $em = $this->em;
 
         //If staged Payouts -> Check if payout needs to be done!
-        if($_ENV['PAYOUT_MODE'] == 'staged'){
+        if($this->container->getParameter('payout_mode') == 'staged'){
             $count = $payouts = $doctrine->getRepository(Payouts::class)
                 ->stagedPayouts()[1];
-            if ($count < $_ENV['STAGED_PAYOUTS']){
+            if ($count < $this->container->getParameter('rpcuser')){
                 return false;
             }
         }
 
 
-        $url = "http://".$_ENV['RPCUSER'].":".$_ENV['RPCPASSWORD']."@".$_ENV['RPCHOST'].":".$_ENV['RPCPORT'];
+        $url = "http://".$this->container->getParameter('rpcuser').":".$this->container->getParameter('rpcpassword')."@".$this->container->getParameter('rpchost').":".$this->container->getParameter('rpcport');
 
 
 
@@ -67,7 +70,7 @@ class PayoutProcessor
             return false;
         }
 
-        if($_ENV['SINGLE_PAYOUT'] == 'yes'){
+        if($this->container->getParameter('single_payout')){
             //Single TX per Payout
             foreach($payouts as $payout){
                 $tx = $client->execute('sendtoaddress',array($payout->getAddress(),$payout->getAmount()));
@@ -79,7 +82,7 @@ class PayoutProcessor
 
 
 
-        } elseif ($_ENV['SINGLE_PAYOUT'] == 'no') {
+        } elseif (!$this->container->getParameter('secret')) {
             $sendmany = array();
             foreach($payouts as $payout){
                 if (array_key_exists($payout->getAddress(), $sendmany)) {

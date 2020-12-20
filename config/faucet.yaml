@@ -1,4 +1,29 @@
 parameters:
+  # Coin
+  coinname: 'Dash'
+  cointicker: 'Dash'
+
+  # Wallet
+  rpchost: '127.0.0.1'
+  rpcport: '9998'
+  rpcuser: 'faucet'
+  rpcpassword: 'faucetpay'
+  single_payout: false
+
+  # Faucet mode
+  claim_min: 1
+  claim_max: 2 # Set Amount which can be claimed at each claim, if CLAIM_MIN equals CLAIM_MAX the amount will be the same at every claim otherwise a random amount between both values will be generated
+  claim_difference: 200 # Time between claims in seconds
+  payout_mode: 'timed' # Payout mode, available: (staged => pay out when STAGED_PAYOUTS payments are in the queue, timed => pay out each x seconds)
+  staged_payouts: 5
+  payout_time: 3600 # Seconds between each payments, please set the cronjob according to this (reference in Readme)
+
+  # Captcha
+  provider: 'hcaptcha' # Coming soon
+  secret: ''
+  site_key: ''
+
+  # Advertising
   ad_top: true
   ad_center: true
   ad_left: false #Coming soon

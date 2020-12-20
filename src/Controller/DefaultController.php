@@ -66,7 +66,7 @@ class DefaultController extends AbstractController
             }
 
             //Generate Payout Amount
-            $amount = round($this->random_float($_ENV['CLAIM_MIN'],$_ENV['CLAIM_MAX']), 8);
+            $amount = round($this->random_float($this->getParameter('claim_min'),$this->getParameter('claim_max')), 8);
             $payout->setAmount($amount);
 
 
@@ -102,7 +102,7 @@ class DefaultController extends AbstractController
     }
 
     private function validateAddress($address){
-        $url = "http://".$_ENV['RPCUSER'].":".$_ENV['RPCPASSWORD']."@".$_ENV['RPCHOST'].":".$_ENV['RPCPORT'];
+        $url = "http://".$this->getParameter('rpcuser').":".$this->getParameter('rpcpassword')."@".$this->getParameter('rpchost').":".$this->getParameter('rpcport');
 
 
         try{

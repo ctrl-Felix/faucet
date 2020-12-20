@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use Doctrine\Persistence\ManagerRegistry;
 use JsonRPC\Client;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -12,8 +13,9 @@ use App\Entity\Payouts;
 class FaucetValuesExtension extends AbstractExtension
 {
 
-    public function __construct(ManagerRegistry $doctrine){
+    public function __construct(ManagerRegistry $doctrine, ContainerInterface $container){
         $this->doctrine =  $doctrine;
+        $this->container = $container;
     }
 
     public function getFilters(): array
@@ -58,7 +60,7 @@ class FaucetValuesExtension extends AbstractExtension
 
     public function balance()
     {
-        $url = "http://".$_ENV['RPCUSER'].":".$_ENV['RPCPASSWORD']."@".$_ENV['RPCHOST'].":".$_ENV['RPCPORT'];
+        $url = "http://".$this->container->getParameter('rpcuser').":".$this->container->getParameter('rpcpassword')."@".$this->container->getParameter('rpchost').":".$this->container->getParameter('rpcport');
         try{
             $client = new Client($url);
             $balance = $client->execute('getbalance');

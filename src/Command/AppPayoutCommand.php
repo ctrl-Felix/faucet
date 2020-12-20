@@ -12,14 +12,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AppPayoutCommand extends Command
 {
     protected static $defaultName = 'app:payout';
 
-    public function __construct(PayoutProcessor $payoutProcessor)
+    public function __construct(PayoutProcessor $payoutProcessor, ContainerInterface $container)
     {
         $this->PayoutProcessor = $payoutProcessor;
+        $this->container = $container;
 
         parent::__construct();
 
@@ -37,7 +39,7 @@ class AppPayoutCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        if($_ENV['PAYOUT_MODE'] != 'timed'){
+        if($this->container->getParameter('payout_mode') != 'timed'){
             $io->error('Stages Mode is activated. No payouts by using this cron. (To force payouts use --force');
 
             return Command::FAILURE;
