@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Payouts;
 use App\Form\ClaimType;
 use App\Service\Captcha;
+use App\Service\Fiat;
 use JsonRPC\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="app_default_faucet")
      */
-    public function index(Request $request, Captcha $captcha): Response
+    public function index(Request $request, Captcha $captcha, Fiat $fiat): Response
     {
         $payout = new Payouts();
         $form = $this->createForm(ClaimType::class, $payout);
@@ -40,16 +41,18 @@ class DefaultController extends AbstractController
             //Check if Ip has already claimed. If ip can't be resolved create an error
             $ip = $request->getClientIp();
             if($ip == 'unknown'){
-                $allowclaim = true;
+                $denyclaim = true;
+            } else {
+                $denyclaim = $this->getDoctrine()
+                    ->getRepository(Payouts::class)
+                    ->checkAddressAndIp($payout->getAddress(), $ip);
             }
 
 
-            $allowclaim = $this->getDoctrine()
-                ->getRepository(Payouts::class)
-                ->checkAddressAndIp($payout->getAddress(), $ip);
 
 
-            if($allowclaim){
+
+            if($denyclaim){
                 $this->addFlash(
                     'error',
                     'You already claimed. Please wait a bit.'
@@ -66,10 +69,23 @@ class DefaultController extends AbstractController
             }
 
             //Generate Payout Amount
-            $amount = round($this->random_float($this->getParameter('claim_min'),$this->getParameter('claim_max')), 8);
+            $min = $this->getParameter('claim_min');
+            $max = $this->getParameter('claim_max');
+            if(str_ends_with($min,'€') or str_ends_with($min,'$')){
+                $amount = $fiat->getAmount();
+                if ($amount == -1){
+                    //something went wrong
+                    $this->addFlash(
+                        'error',
+                        'Something went wrong.'
+                    );
+                    return $this->redirectToRoute('app_default_faucet');
+                }
+            } else {
+                $amount = round($this->random_float($min,$max), 8);
+            }
+
             $payout->setAmount($amount);
-
-
             $payout->setTime(new \DateTime());
             $payout->setIp($ip);
             $em = $this->getDoctrine()->getManager();
@@ -82,14 +98,7 @@ class DefaultController extends AbstractController
             );
             return $this->redirectToRoute('app_default_faucet');
 
-
-
-
-
         }
-
-
-
 
         return $this->render('default/faucet.html.twig', [
             'form' => $form->createView(),
