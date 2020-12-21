@@ -46,12 +46,9 @@ class Fiat {
 
 
 
-        } else {
-            return -1;
         }
-        //get currency
 
-        return 1;
+        return -1;
 
     }
 }

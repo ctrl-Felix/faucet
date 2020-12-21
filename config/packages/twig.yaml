@@ -5,6 +5,8 @@ twig:
         recaptcha_site_key: '%site_key%'
         ticker: '%cointicker%'
         coinname: '%coinname%'
+        claim_min: '%claim_min%'
+        claim_max: '%claim_max%'
         mode: '%payout_mode%'
         staged_payouts: '%staged_payouts%'
         payout_time: '%payout_time%'
