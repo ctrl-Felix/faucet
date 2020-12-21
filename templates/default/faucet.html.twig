@@ -21,6 +21,13 @@
     </style>
 {% endblock %}
 
+{% block background %}
+    <canvas class="absolute top-0" style="width: 100vw;max-width: 100%; height: 120vh" id="background"></canvas>
+
+{% endblock %}
+
+
+
 {% block body %}
     {% for message in app.flashes('error') %}
         <div class="alert-banner w-full fixed top-0">
@@ -48,7 +55,7 @@
             </label>
         </div>
     {% endfor %}
-    <div class="lg:w-2/5 container m-auto">
+    <div class="relative lg:w-2/5 container m-auto">
         <div class="grid grid-cols-2 gap-4 mt-24">
             {% if ad_top %}
                 <div class="pt-2 pb-2 w-full bg-white rounded col-span-2 shadow-lg flex">
@@ -91,7 +98,7 @@
                 </div>
             {% endif %}
 
-            <div class="mt-10 col-span-2 rounded border shadow-lg bg-gradient-to-r from-green-400 to-blue-500">
+            <div class="mt-10 col-span-2 rounded shadow-lg bg-gradient-to-r from-green-400 to-blue-500">
 
 
                 {{ form_start(form) }}
@@ -105,5 +112,18 @@
     </div>
 {% endblock %}
 {% block javascripts %}
-<script src="https://hcaptcha.com/1/api.js" async defer></script>
+    <script src="https://hcaptcha.com/1/api.js" async defer></script>
+    <script src="https://unpkg.com/thpace"></script>
+
+    <script>
+        const canvas = document.querySelector('#background');
+
+        const settings = {
+            colors: ['#4CB1EF',  '#424959',  '#FF4B44'],
+            triangleSize: 100
+        };
+
+        Thpace.create(canvas, settings);
+    </script>
+
 {% endblock %}

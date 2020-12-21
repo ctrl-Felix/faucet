@@ -7,8 +7,9 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    {% block background %}{% endblock %}
+    {% block body %}{% endblock %}
+    {% block javascripts %}{% endblock %}
 
         {% if adblock_blocker %}
             {# Adblocker provided by https://blockadblock.com #}
