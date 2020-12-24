@@ -82,7 +82,7 @@ class PayoutProcessor
 
 
 
-        } elseif (!$this->container->getParameter('secret')) {
+        } elseif (!$this->container->getParameter('single_payout')) {
             $sendmany = array();
             foreach($payouts as $payout){
                 if (array_key_exists($payout->getAddress(), $sendmany)) {

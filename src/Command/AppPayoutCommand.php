@@ -40,7 +40,7 @@ class AppPayoutCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         if($this->container->getParameter('payout_mode') != 'timed'){
-            $io->error('Stages Mode is activated. No payouts by using this cron. (To force payouts use --force');
+            $io->error('Staged Mode is activated. No payouts by using this cron. (To force payouts use --force');
 
             return Command::FAILURE;
 
