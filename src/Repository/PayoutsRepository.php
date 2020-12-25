@@ -80,6 +80,14 @@ class PayoutsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getLastPayouts(){
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.tx is not NULL')
+            ->getQuery()
+            ->setMaxResults(15)
+            ->getResult();
+    }
+
     /*
     public function findOneBySomeField($value): ?Payouts
     {

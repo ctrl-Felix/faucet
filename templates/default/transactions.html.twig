@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block background %}
+    <canvas class="absolute top-0" style="width: 100vw;max-width: 100%; height: 120vh" id="background"></canvas>
+
+{% endblock %}
+
+
+
+{% block body %}
+    <div class="relative lg:w-2/5 container m-auto">
+        <div class="grid grid-cols-2 gap-4 mt-24">
+            {% if ad_top %}
+                <div class="pt-2 pb-2 w-full bg-white rounded col-span-2 shadow-lg flex">
+                    <div class="m-auto">
+                        {% include 'ads/ad_top.html.twig' %}
+                    </div>
+                </div>
+            {% endif %}
+
+
+            {% if ad_center %}
+                <div class="mt-10 pt-2 pb-2 w-full bg-white rounded col-span-2 shadow-lg flex">
+                    <div class="m-auto">
+                        {% include 'ads/ad_center.html.twig' %}
+                    </div>
+                </div>
+            {% endif %}
+
+
+
+
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://unpkg.com/thpace"></script>
+
+    <script>
+        const canvas = document.querySelector('#background');
+
+        const settings = {
+            colors: ['#4CB1EF',  '#424959',  '#FF4B44'],
+            triangleSize: 100
+        };
+
+        Thpace.create(canvas, settings);
+    </script>
+
+{% endblock %}

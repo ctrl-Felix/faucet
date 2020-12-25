@@ -19,7 +19,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="app_default_faucet")
      */
-    public function index(Request $request, Captcha $captcha, Fiat $fiat): Response
+    public function app_default_faucet(Request $request, Captcha $captcha, Fiat $fiat): Response
     {
         $payout = new Payouts();
         $form = $this->createForm(ClaimType::class, $payout);
@@ -104,6 +104,21 @@ class DefaultController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * @Route("/transactions", name="app_default_transactions")
+     */
+    public function app_default_transactions(): Response {
+        $tx = $this->getDoctrine()
+            ->getRepository(Payouts::class)
+            ->getLastPayouts();
+
+        return $this->render('default/transactions.html.twig',[
+            'transactions' => $tx,
+        ]);
+    }
+
 
 
     private function random_float ($min,$max) {
