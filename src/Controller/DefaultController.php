@@ -28,6 +28,7 @@ class DefaultController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
             //Check if captcha is valid
+            print_r($request->request->get('validateClaim'));
             if(!$captcha->validateCaptcha($request->request->get('h-captcha-response'))){
                 //Captcha not valid
                 $this->addFlash(
@@ -94,7 +95,7 @@ class DefaultController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'You claimed '.$amount
+                'You claimed '.$amount.' '.$request->request->get('validateClaim')
             );
             return $this->redirectToRoute('app_default_faucet');
 

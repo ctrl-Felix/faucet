@@ -9,3 +9,6 @@
 import './styles/app.css';
 // start the Stimulus application
 import './bootstrap';
+
+//adblocker
+import './js/adblocker.js';
