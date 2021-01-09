@@ -1,11 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
+    <style>
+        .ads {
+            width: 1px;
+        }
+    </style>
+
 {% endblock %}
 
 {% block background %}
-    <canvas class="absolute top-0" style="width: 100vw;max-width: 100%; height: 120vh" id="background"
+    {% if background_allow %}
+    <canvas class="m-0 p-0absolute top-0 fixed w-full h-full" style="" id="background"
             xmlns="http://www.w3.org/1999/html"></canvas>
+    {% endif %}
 
 {% endblock %}
 
@@ -38,8 +46,12 @@
             </label>
         </div>
     {% endfor %}
+    <div id="valid">
+        <div class="h-24 ads"></div>
+    </div>
+
     <div class="relative xxl:w-2/5 xl:w-1/2 lg:w-3/5 w-4/5 container m-auto">
-        <div class="grid grid-cols-2 gap-4 mt-24">
+        <div class="grid grid-cols-2 gap-4">
             {% if ad_top %}
                 <div class="pt-2 pb-2 w-full bg-white rounded col-span-2 shadow-lg flex overflow-hidden">
                     <div class="m-auto">
@@ -69,7 +81,9 @@
 
 
                     {% endif %}
-
+                    {% if custom_text is not empty %}
+                        {{ custom_text|raw }}
+                    {% endif %}
                 </p>
             </div>
 
@@ -87,9 +101,14 @@
                     {{ form_start(form) }}
                     {{form_widget(form)}}
                     <div class="m-4 h-captcha" data-sitekey="8328d1d3-b2d5-461e-be26-4cce20b2ba46"></div>
-                    <input type="hidden" name="validateClaim" id="validateClaim" value="wdasdwdas" />
                     {{ form_end(form) }}
                 </div>
+
+            {% if adblock_blocker %}
+                <div id="disableAdblock" style="visibility: hidden;" class="mt-10 col-span-2 rounded shadow-lg bg-gradient-to-r from-green-400 to-blue-500 relative">
+                    <p class="m-4">Please disable your Adblocker</p>
+                </div>
+            {% endif %}
 
 
 
@@ -99,8 +118,10 @@
 {% endblock %}
 {% block javascripts %}
     <script src="https://hcaptcha.com/1/api.js" async defer></script>
-    <script src="https://unpkg.com/thpace"></script>
 
+    {% if background_allow %}
+    <script src="https://unpkg.com/thpace"></script>
+    {% endif %}
     <script>
         const canvas = document.querySelector('#background');
 
@@ -112,19 +133,23 @@
         Thpace.create(canvas, settings);
     </script>
     {% if adblock_blocker %}
-        {{ encore_entry_script_tags('adblocker') }}
-
         <script type="text/javascript">
-            function runOnLoad(){
-                console.log(validateClaim());
-                var id = validateClaim();
-                document.getElementById("client_id").value = id;
-            }
+            function httpGetAsync()
+            {
+                var xmlHttp = new XMLHttpRequest();
+                var first = true;
+                xmlHttp.onreadystatechange = function() {
+                    if (xmlHttp.readyState === 4 && xmlHttp.status !== 200){
+                        document.getElementById("disableAdblock").style.visibility = "visible";
+                        document.getElementById("claimform").style.visibility = "hidden";
+                        document.getElementById("claimform").style.display = "none";
+                    }
 
-            function check(){
-                console.log(validateClaim());
+                }
+                xmlHttp.open("GET", "{{ asset('build/adblocker.js') }}", true); // true for asynchronous
+                xmlHttp.send(null);
             }
-            window.onload = check;
+            window.onload = httpGetAsync;
 
 
         </script>

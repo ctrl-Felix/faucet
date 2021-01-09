@@ -23,9 +23,9 @@ parameters:
   secret: ''
   site_key: ''
 
-  # Advertising
+  # Frontend
   ad_top: true
   ad_center: true
-  ad_left: false #Coming soon
-  ad_right: false #Coming soom
   adblock_blocker: true
+  background: true
+  custom_text: ''

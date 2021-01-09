@@ -1,4 +1,1 @@
-function validateClaim(){
-    var claimid = "allowclaim";
-    return claimid
-}
+var adblocker = true;
