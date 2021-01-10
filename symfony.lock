@@ -2,12 +2,6 @@
     "composer/package-versions-deprecated": {
         "version": "1.11.99.1"
     },
-    "datto/json-rpc": {
-        "version": "6.1.0"
-    },
-    "datto/json-rpc-http": {
-        "version": "5.0.6"
-    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -90,6 +84,9 @@
     "fguillot/json-rpc": {
         "version": "v1.2.5"
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.2"
+    },
     "laminas/laminas-code": {
         "version": "3.5.1"
     },
@@ -104,9 +101,6 @@
     },
     "nikic/php-parser": {
         "version": "v4.10.3"
-    },
-    "ocramius/proxy-manager": {
-        "version": "2.10.0"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -538,9 +532,6 @@
     },
     "twig/twig": {
         "version": "v3.1.1"
-    },
-    "webimpress/safe-writer": {
-        "version": "2.1.0"
     },
     "webmozart/assert": {
         "version": "1.9.1"
